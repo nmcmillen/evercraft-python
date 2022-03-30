@@ -78,6 +78,7 @@ def test_i_slapped_will_smith_harder():
     traits={}
     enemy= Character(traits)
     assert Character.attack(enemy, 14) == "Hit"
+
 # def test_attack_roll20():
 
 #### Feature: Character Can Attack
