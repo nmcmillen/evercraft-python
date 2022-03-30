@@ -2,36 +2,53 @@
 TRAITS = {
     "name": "Rufus",
     "alignment": 'good',
-    "AC": 10,
-    'hit_points': 5
-    }
+    "AC": 12,
+    'HP': 8
+}
 
-CHARACTER_DEF = {
+"""CHARACTER_DEF = {
     "name": "Evercraft",
     "alignment": "neutral",
     "AC": 10,
     "hit_point": 5
-}
-
+}"""
+ 
 class Character:
-    def __init__(self, object):
-        if self.name in TRAITS.keys():
-            TRAITS["name"] = self.values.name
-        else:
-            CHARACTER_DEF["name"] = self.values.name
-        self.name = object["name"], default["name"]
-        self.alignment = object["alignment"] 
-        self.AC = object["AC"]
-    
-    def set_name(self, name, alignment):
+    name = "Evercraft"
+    alignment = "neutral"
+    AC = 10
+    HP = 5
+    def __init__(self, obj=None):
+        if obj:
+            self.name = obj["name"]
+            self.alignment = obj["alignment"] 
+            self.AC = obj["AC"]
+            self.HP = obj["HP"]
+     
+    def set_name(self, name):
        self.name = name
 
     def get_name(self):
        return self.name
+    
+    def attack(target, roll):
+        if roll == 20 or roll >= target.AC:
+            return "Hit"
+        elif roll < target.AC:
+            return "Whiff"
+        else:
+            return "I don't know what to do"
 
 
-c1 = Character(TRAITS, CHARACTER_DEF)
-#c2 = Character("Bob", "evil")
+c1 = Character(TRAITS)
+c2 = Character()
+bad_guy = {
+    "name": "Evil Rufus",
+    "alignment": 'evil',
+    "AC": 12,
+    'HP': 8
+}
+enemy = Character(bad_guy)
+print(c1.AC)
 
-print(c1.AC) 
 
