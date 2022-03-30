@@ -2,27 +2,36 @@
 TRAITS = {
     "name": "Rufus",
     "alignment": 'good',
-    "AC": 12,
+    "armor": 12,
     'HP': 8
 }
 
 """CHARACTER_DEF = {
     "name": "Evercraft",
     "alignment": "neutral",
-    "AC": 10,
+    "armor": 10,
     "hit_point": 5
 }"""
- 
+
 class Character:
     name = "Evercraft"
     alignment = "neutral"
-    AC = 10
+    armor = 10
     HP = 5
+    alive = True
+    abilities = {
+        "strength" : 10,
+        "dexterity" : 10,
+        "constitution" : 10,
+        "wisdom" : 10,
+        "intelligence" : 10,
+        "charisma" : 10
+    }
     def __init__(self, obj=None):
         if obj:
             self.name = obj["name"]
             self.alignment = obj["alignment"] 
-            self.AC = obj["AC"]
+            self.armor = obj["armor"]
             self.HP = obj["HP"]
      
     def set_name(self, name):
@@ -32,12 +41,20 @@ class Character:
        return self.name
     
     def attack(target, roll):
-        if roll == 20 or roll >= target.AC:
-            return "Hit"
-        elif roll < target.AC:
+        if roll == 20:
+            target.HP = target.HP - 2
+            if target.HP <= 0:
+                target.alive = False
+            return 'Critical Hit'
+        if roll >= target.armor and roll != 20:
+            target.HP = target.HP - 1
+            if target.HP <= 0:
+                target.alive = False
+            return 'Hit'
+        elif roll < target.armor:
             return "Whiff"
         else:
-            return "I don't know what to do"
+            return "That doesn't seem to be a number"
 
 
 c1 = Character(TRAITS)
@@ -45,10 +62,8 @@ c2 = Character()
 bad_guy = {
     "name": "Evil Rufus",
     "alignment": 'evil',
-    "AC": 12,
+    "armor": 12,
     'HP': 8
 }
 enemy = Character(bad_guy)
-print(c1.AC)
-
-
+print(c1.armor)
