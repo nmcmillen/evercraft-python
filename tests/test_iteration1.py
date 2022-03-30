@@ -49,14 +49,12 @@ def test_makeCharacterAlignGood():
 #if an empty object is passed in, will the AC==10?
 # this assumes that the object being passed in is empty, so we can check for
 # a default value rather than manually passing one in at creation
-def test_defaultAC():
-    traits= { }
-    c2 = Character(traits)
+def test_defaultArmor():
+    c2 = Character()
     assert c2.armor==10
 
 def test_default_hit_points():
-    traits = {}
-    c2 = Character(traits)
+    c2 = Character()
     assert c2.HP == 5
 
 
