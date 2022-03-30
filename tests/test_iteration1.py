@@ -1,5 +1,5 @@
 import pytest
-from evercraft.models.character import Character
+from evercraft.models.character import *
 #### Feature: Create a Character
 #get a name
 #set a name
@@ -22,16 +22,16 @@ def test_setCharacterName():
     assert c1.name == ret_name 
 
 # test case for character name
-def test_getCharacterName():
-    ret_name = "Rufus"
-    traits = {
-    "name": "Rufus",
-    "alignment": 'good',
-    "armor": 10,
-    "HP": 12
-    }
-    c1 = Character(traits)
-    assert c1.get_name()==ret_name
+# def test_getCharacterName():
+#     ret_name = "Rufus"
+#     traits = {
+#     "name": "Rufus",
+#     "alignment": 'good',
+#     "armor": 10,
+#     "HP": 12
+#     }
+#     c1 = Character(traits)
+#     assert c1.get_name()==ret_name
 
 # make character alignment good
 def test_makeCharacterAlignGood():
@@ -148,4 +148,30 @@ def test_character_set_abilities():
         "charisma" : 10
     }
 # - Abilities range from 1 to 20 and default to 10
+
 # - Abilities have modifiers according to the following table
+def test_modifier_18():
+    assert modifier(18) == 4
+
+def test_modifier_5():
+    assert modifier(5) == -3
+
+# roll = 15
+# 
+def test_i_can_deal_modified_damage_default():
+    enemy = Character()
+    Character.attack(enemy, 19)
+    assert enemy.HP == 4
+
+def test_i_can_deal_modified_damage_15():
+    enemy = Character()
+    c1 = Character({"abilities" : {"strength" : 15, "dexterity" : 10,"constitution" : 10,"wisdom" : 10,"intelligence" : 10,"charisma" : 10}})
+    c1.attack(enemy, 19)
+    assert enemy.HP == 2
+# add Strength modifier to:
+    ## attack roll and damage dealt
+    ## double Strength modifier on critical hits
+    ## minimum damage is always 1 (even on a critical hit)
+
+# add Dexterity modifier to armor class
+# add Constitution modifier to hit points (always at least 1 hit point)
