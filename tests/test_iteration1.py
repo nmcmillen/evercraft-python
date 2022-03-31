@@ -71,27 +71,27 @@ def test_default_hit_points():
 
 # test for a crit success regardless of enemy AC
 def test_create_enemy():
-    traits = {}
-    enemy = Character(traits)
-    assert Character.attack(enemy, 20) == "Critical Hit"
+    c1 = Character()
+    enemy = Character()
+    assert Character.attack(c1, enemy, 20) == "Critical Hit"
 
 #test for a miss with a roll lower than the enemy AC
 def test_guess_i_never_miss_huh():
-    traits={}
-    enemy = Character(traits)
-    assert Character.attack(enemy, 9) == "Whiff"
+    c1 = Character()
+    enemy = Character()
+    assert c1.attack(enemy, 9) == "Whiff"
 
 #test for a hit with a result greater than enemy AC
 def test_i_slapped_will_smith():
-    traits={}
-    enemy= Character(traits)
-    assert Character.attack(enemy, 10) == "Hit"
+    c1 = Character()
+    enemy= Character()
+    assert c1.attack(enemy, 10) == "Hit"
 
 #test for a hit with a roll greater than enemy AC
 def test_i_slapped_will_smith_harder():
-    traits={}
-    enemy= Character(traits)
-    assert Character.attack(enemy, 14) == "Hit"
+    c1 = Character()
+    enemy= Character()
+    assert Character.attack(c1, enemy, 14) == "Hit"
 
 
 # #### Feature: Character Can Be Damaged
@@ -101,16 +101,16 @@ def test_i_slapped_will_smith_harder():
 # - If attack is successful, other character takes 1 point of damage when hit
 # this should have the enemy take one damage on a hit that isn't a crit
 def test_i_can_deal_damage():
-    traits={}
-    enemy = Character(traits)
-    Character.attack(enemy, 19)
+    c1 = Character()
+    enemy = Character()
+    c1.attack(enemy, 19)
     assert enemy.HP == 4
 # - If a roll is a natural 20 then a critical hit is dealt and the damage is doubled
 
 def test_critical_hit():
-    traits = {}
-    enemy = Character(traits)
-    Character.attack(enemy, 20)
+    c1 = Character()
+    enemy = Character()
+    c1.attack(enemy, 20)
     assert enemy.HP == 3
     
 # when hit points are 0 or fewer, the character is dead
@@ -123,22 +123,23 @@ def test_hp_zero():
         'HP': 1,
         'alive': True
     }
+    c1 = Character()
     enemy = Character(traits)
-    Character.attack(enemy, 17)
+    c1.attack(enemy, 17)
     assert enemy.alive == False
 
 # #### Feature: Character Has Abilities Scores
 # > As a character I want to have several abilities so that I am not identical to other characters except in name
 def test_character_abilities():
-    traits = {}
-    c1 = Character(traits)
+    
+    c1 = Character()
     assert c1.abilities
 
 
 # - Abilities are Strength, Dexterity, Constitution, Wisdom, Intelligence, Charisma
 def test_character_set_abilities():
-    traits = {}
-    c1 = Character(traits)
+    
+    c1 = Character()
     assert c1.abilities == {
         "strength" : 10,
         "dexterity" : 10,
@@ -151,27 +152,76 @@ def test_character_set_abilities():
 
 # - Abilities have modifiers according to the following table
 def test_modifier_18():
-    assert modifier(18) == 4
+    c1 = Character()
+    assert c1.modifier(18) == 4
 
 def test_modifier_5():
-    assert modifier(5) == -3
+    c1 = Character()
+    assert c1.modifier(5) == -3
 
 # roll = 15
 # 
 def test_i_can_deal_modified_damage_default():
+    c1 = Character()
     enemy = Character()
-    Character.attack(enemy, 19)
+    c1.attack(enemy, 19)
     assert enemy.HP == 4
 
+# add Strength modifier to:
+    ## attack roll and damage dealt
+    ## double Strength modifier on critical hits
 def test_i_can_deal_modified_damage_15():
     enemy = Character()
     c1 = Character({"abilities" : {"strength" : 15, "dexterity" : 10,"constitution" : 10,"wisdom" : 10,"intelligence" : 10,"charisma" : 10}})
     c1.attack(enemy, 19)
     assert enemy.HP == 2
-# add Strength modifier to:
-    ## attack roll and damage dealt
-    ## double Strength modifier on critical hits
+
     ## minimum damage is always 1 (even on a critical hit)
+def test_i_can_deal_modified_damage_2():
+    enemy = Character()
+    c1 = Character({"abilities" : {"strength" : 2, "dexterity" : 10,"constitution" : 10,"wisdom" : 10,"intelligence" : 10,"charisma" : 10}})
+    c1.attack(enemy, 19)
+    assert enemy.HP == 4
 
 # add Dexterity modifier to armor class
+def test_add_dexterity_mod_to_armor():
+    enemy = Character({"abilities" : {"strength" : 10, "dexterity" : 15,"constitution" : 10,"wisdom" : 10,"intelligence" : 10,"charisma" : 10}})
+    c1 = Character()
+    assert c1.attack(enemy, 11) == "Whiff"
+    
 # add Constitution modifier to hit points (always at least 1 hit point)
+
+def test_i_can_deal_modified_damage_2():
+    enemy = Character({"abilities" : {"strength" : 10, "dexterity" : 10,"constitution" : 15,"wisdom" : 10,"intelligence" : 10,"charisma" : 10}})
+    c1 = Character()
+    c1.attack(enemy, 19)
+    assert enemy.HP == 6
+
+def test_character_gains_experience():
+    c1 = Character()
+    enemy = Character()
+    c1.attack(enemy, 18)
+    assert c1.XP == 10
+
+def test_character_gains_a_level():
+    c1 = Character({"XP":995})
+    enemy = Character()
+    c1.attack(enemy, 18)
+    assert c1.level == 2
+
+# For each level:
+# hit points increase by 5 plus Constitution modifier
+
+def test_character_gains_5_HP_on_level_up():
+    c1 = Character({"XP":995, "abilities" : {"strength" : 10, "dexterity" : 10,"constitution" : 15,"wisdom" : 10,"intelligence" : 10,"charisma" : 10}})
+    enemy = Character()
+    c1.attack(enemy, 18)
+    assert c1.HP == 12
+
+# 1 is added to attack roll for every even level achieved
+
+def test_character_adds_1_to_attack_roll():
+    c1 = Character({"level": 6, "abilities" : {"strength" : 10, "dexterity" : 10,"constitution" : 15,"wisdom" : 10,"intelligence" : 10,"charisma" : 10}})
+    enemy = Character()
+    c1.attack(enemy, 9)
+    assert enemy.HP == 4
