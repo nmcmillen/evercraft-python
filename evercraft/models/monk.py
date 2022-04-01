@@ -1,27 +1,36 @@
 from evercraft.models.character import Character
 
 class Monk(Character):
-    
+
     DEFAULT_VALUES = {
-        "name": "Billy",
-        "alignment": "neutral",
-        "XP": 0,
-        "level": 1,
-        "attack_damage": 3, ## THIS IS NOW 3 INSTEAD OF 1
-        "armor": 10,
-        "base_HP": 5,
-        "HP": 5,
-        "alive": True,
-        "abilities": {
-            # todo: MAKE A D20 CLASS IF THERE IS TIME TO RANDOMIZE CHARACTER
-            "strength": 10,
-            "dexterity": 10,
-            "constitution": 10,
-            "wisdom": 10,
-            "intelligence": 10,
-            "charisma": 10
-        }
+        **Character.DEFAULT_VALUES,
+        "attack_damage": 3,
+        "base_HP" : 6
     }
+    
+    # DEFAULT_VALUES = {
+    #     "name": "Billy",
+    #     "race": "human",
+    #     "alignment": "neutral",
+    #     "XP": 0,
+    #     "level": 1,
+    #     "attack_damage": 3, ## THIS IS NOW 3 INSTEAD OF 1
+    #     "armor": 10,
+    #     "base_HP": 5,
+    #     "HP": 5,
+    #     "HP_multiplier": 6,
+    #     "alive": True,
+    #     "abilities": {
+    #         # todo: MAKE A D20 CLASS IF THERE IS TIME TO RANDOMIZE CHARACTER
+    #         "strength": 10,
+    #         "dexterity": 10,
+    #         "constitution": 10,
+    #         "wisdom": 10,
+    #         "intelligence": 10,
+    #         "charisma": 10
+    #     }
+    # }
+    
     def __init__(self, obj={}):
         for key in self.DEFAULT_VALUES:
             if key in obj:
@@ -61,11 +70,3 @@ class Monk(Character):
             return "Whiff"
         else:
             return "That doesn't seem to be a number"
-
-    def level_check(self):
-        self.level = 1 + self.XP//1000
-        self.HP = self.base_HP+(5*(self.level-1)) + self.modifier(self.abilities["constitution"])
-
-    def level_check(self):
-        self.level = 1 + self.XP//1000
-        self.HP = self.base_HP+(6*(self.level-1)) + self.modifier(self.abilities["constitution"])

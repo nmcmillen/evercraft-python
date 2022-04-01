@@ -1,6 +1,10 @@
 from evercraft.models.character import Character
 
 class Rogue(Character):
+    DEFAULT_VALUES = {
+        **Character.DEFAULT_VALUES
+    }
+
     def __init__(self, obj={}):
         for key in self.DEFAULT_VALUES:
             if key in obj:

@@ -1,6 +1,11 @@
 from evercraft.models.character import Character
 
 class Fighter(Character):
+
+    DEFAULT_VALUES = {
+        **Character.DEFAULT_VALUES,
+        "HP_multiplier": 10
+    }
     
     def attack(self, target, roll):
         # modified roll calculation and set
@@ -25,7 +30,3 @@ class Fighter(Character):
             return "Whiff"
         else:
             return "That doesn't seem to be a number"
-    
-    def level_check(self):
-        self.level = 1 + self.XP//1000
-        self.HP = self.base_HP+(10*(self.level-1)) + self.modifier(self.abilities["constitution"])
