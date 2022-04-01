@@ -1,6 +1,10 @@
 from evercraft.models.character import Character
 
 class Paladin(Character):
+    DEFAULT_VALUES = {
+        **Character.DEFAULT_VALUES,
+        "HP_multiplier": 8,
+    }
     def __init__(self, obj={}):
         for key in self.DEFAULT_VALUES:
             if key in obj:
@@ -47,7 +51,3 @@ class Paladin(Character):
             return "Whiff"
         else:
             return "That doesn't seem to be a number"
-    
-    def level_check(self):
-        self.level = 1 + self.XP//1000
-        self.HP = self.base_HP+(8*(self.level-1)) + self.modifier(self.abilities["constitution"])

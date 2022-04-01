@@ -15,6 +15,7 @@ import random
 class Character:
     DEFAULT_VALUES = {
         "name": "Billy",
+        "race": "human",
         "alignment": "neutral",
         "XP": 0,
         "level": 1,
@@ -22,6 +23,7 @@ class Character:
         "armor": 10,
         "base_HP": 5,
         "HP": 5,
+        "HP_multiplier": 5,
         "alive": True,
         "abilities": {
             # todo: MAKE A D20 CLASS IF THERE IS TIME TO RANDOMIZE CHARACTER
@@ -74,6 +76,24 @@ class Character:
         self.HP = max(
             1, self.HP + self.modifier(self.abilities["constitution"]))
 
+    def is_orc(self):
+        if self.race == "orc":
+            self.abilities["strength"] += 2
+            self.abilities["intelligence"] -=1
+            self.abilities["wisdom"] -=1
+            self.abilities["charisma"] -=1
+            self.armor +=2
+
+    def is_dwarf(self):
+        if self.race == "dwarf":
+            self.abilities["constitution"] += 1
+            self.abilities["charisma"] -=1
+            # self.abilities["intelligence"] -=1
+            # self.abilities["wisdom"] -=1
+            # self.armor +=2
+
+        
+
     def attack(self, target, roll):
         # modified roll calculation and set
         modified_roll = roll + self.modifier(self.abilities["strength"]) + (self.level // 2)
@@ -100,7 +120,7 @@ class Character:
 
     def level_check(self):
         self.level = 1 + self.XP//1000
-        self.HP = self.base_HP+(5*(self.level-1)) + self.modifier(self.abilities["constitution"])
+        self.HP = self.base_HP+(self.HP_multiplier*(self.level-1)) + self.modifier(self.abilities["constitution"])
 
         
         
